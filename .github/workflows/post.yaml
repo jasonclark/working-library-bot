@@ -1,0 +1,19 @@
+name: "Post to Bluesky"
+
+on: workflow_dispatch
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+      - run: npm ci
+      - name: Send post
+        run: node bot.js
+        env:
+          BLUESKY_BOT_USERNAME: ${{ secrets.BLUESKY_BOT_USERNAME }}
+          BLUESKY_BOT_PASSWORD: ${{ secrets.BLUESKY_BOT_PASSWORD }}
