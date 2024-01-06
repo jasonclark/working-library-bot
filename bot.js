@@ -21,8 +21,8 @@ const generateLibraryQuote = async () => {
 
     const agent = new BskyAgent({ service: "https://bsky.social/" });
     await agent.login({
-      identifier: config.parsed.BLUESKY_BOT_USERNAME,
-      password: config.parsed.BLUESKY_BOT_PASSWORD,
+      identifier: process.env.BLUESKY_BOT_USERNAME,
+      password: process.env.BLUESKY_BOT_PASSWORD,
     });
     
     //const rt = new RichText({ text: fileContent.body }); 
