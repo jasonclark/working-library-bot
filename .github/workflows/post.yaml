@@ -8,10 +8,6 @@ on:
     branches:
       - main
 
-env:
-  BLUESKY_BOT_USERNAME: ${{ secrets.BLUESKY_BOT_USERNAME }}
-  BLUESKY_BOT_PASSWORD: ${{ secrets.BLUESKY_BOT_PASSWORD }}
-
 jobs:
   post:
     runs-on: ubuntu-latest
@@ -23,6 +19,8 @@ jobs:
           node-version-file: ".nvmrc"
       - run: npm ci
       - name: Send post
-        run: | 
-          echo "This is the $BLUESKY_BOT_USERNAME environment variable"
+        env:
+          BLUESKY_BOT_USERNAME: ${{ secrets.BLUESKY_BOT_USERNAME }}
+          BLUESKY_BOT_PASSWORD: ${{ secrets.BLUESKY_BOT_PASSWORD }}
+        run:
           node bot.js
