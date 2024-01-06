@@ -24,5 +24,5 @@ jobs:
       - run: npm ci
       - name: Send post
         run: | 
-          echo "This is the BLUESKY_BOT_USERNAME :environment variable"
+          echo "This is the $BLUESKY_BOT_USERNAME environment variable"
           node bot.js
