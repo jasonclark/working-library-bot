@@ -21,6 +21,7 @@ const generateLibraryQuote = async () => {
 
     const agent = new BskyAgent({ service: "https://bsky.social/" });
     await agent.login({
+      //can use config.parsed in place of process.env below - switched to make github workflow actions and secrets work.
       identifier: process.env.BLUESKY_BOT_USERNAME,
       password: process.env.BLUESKY_BOT_PASSWORD,
     });
