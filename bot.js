@@ -16,23 +16,18 @@ const generateLibraryQuote = async () => {
     //console.log(fileContent);
 
     const rawContent = await fs.readFile(fileName, "utf8");
-    const lines = rawContent.split("\n").filter(line => line.trim() !== "");
+    const cleanQuotes = rawContent
+      .split("\n")
+      .map(line => line.match(/"(.*?)"/)?.[1] || line.trim())
+      .filter(line => line !== "");
+
+    const quote1 = chooseRandom(cleanQuotes);
+    //check for second quote that won't break 300 char limit
+    const validSecondQuotes = cleanQuotes.filter(q => (quote1.length + q.length + 1) <= 300);
     
-    // Extract only the text inside quotation marks
-    const cleanQuotes = lines.map(line => {
-      const match = line.match(/"(.*)"/);
-      return match ? match[1] : line.trim();
-    });
-
-    // Generate a combo that is under 300 characters
-    let post = "";
-    let attempts = 0;
-    do {
-      post = `${chooseRandom(cleanQuotes)} ${chooseRandom(cleanQuotes)}`;
-      attempts++;
-    } while (post.length > 300 && attempts < 50);
-
-    if (post.length > 300) throw new Error("Could not generate a post under 300 characters.");
+    if (validSecondQuotes.length === 0) throw new Error("Could not find a short enough combo.");
+    
+    const post = `${quote1} ${chooseRandom(validSecondQuotes)}`;
     console.log("Drafting Post:", post);
 
     const agent = new BskyAgent({ service: "https://bsky.social/" });
