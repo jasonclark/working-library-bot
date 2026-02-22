@@ -15,9 +15,25 @@ const generateLibraryQuote = async () => {
     //const fileContent = JSON.parse(await fs.readFile(fileName));
     //console.log(fileContent);
 
-    const fileContent = (await fs.readFile(fileName)).toString().split("\n");
-    const post = `${chooseRandom(fileContent).trim().slice(1, -2)} ${chooseRandom(fileContent).trim().slice(1, -2)}`;
-    console.log(post);
+    const rawContent = await fs.readFile(fileName, "utf8");
+    const lines = rawContent.split("\n").filter(line => line.trim() !== "");
+    
+    // Extract only the text inside quotation marks
+    const cleanQuotes = lines.map(line => {
+      const match = line.match(/"(.*)"/);
+      return match ? match[1] : line.trim();
+    });
+
+    // Generate a combo that is under 300 characters
+    let post = "";
+    let attempts = 0;
+    do {
+      post = `${chooseRandom(cleanQuotes)} ${chooseRandom(cleanQuotes)}`;
+      attempts++;
+    } while (post.length > 300 && attempts < 50);
+
+    if (post.length > 300) throw new Error("Could not generate a post under 300 characters.");
+    console.log("Drafting Post:", post);
 
     const agent = new BskyAgent({ service: "https://bsky.social/" });
     await agent.login({
@@ -28,6 +44,8 @@ const generateLibraryQuote = async () => {
     
     //const rt = new RichText({ text: fileContent.body }); 
     const rt = new RichText({ text: post });
+    await rt.detectFacets(agent);
+
     const postRecord = {
       $type: "app.bsky.feed.post",
       text: rt.text,
@@ -37,7 +55,8 @@ const generateLibraryQuote = async () => {
 
     await agent.post(postRecord);
   } catch (err) {
-    console.error("Error:", err);
+    console.error("Bot Failed to Post:", err);
+    process.exit(1);
   }
 };
 
