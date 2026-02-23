@@ -23,6 +23,6 @@ jobs:
         env:
           BLUESKY_BOT_USERNAME: ${{ secrets.BLUESKY_BOT_USERNAME }}
           BLUESKY_BOT_PASSWORD: ${{ secrets.BLUESKY_BOT_PASSWORD }}
-          NODE_OPTIONS: "--dns-result-order=ipv4first" # <-- THE FIX
+          ##NODE_OPTIONS: "--dns-result-order=ipv4first"
         run:
           node bot.js
