@@ -12,15 +12,17 @@ jobs:
   post:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
+          cache: 'npm'
       - run: npm ci
       - name: Send post
         env:
           BLUESKY_BOT_USERNAME: ${{ secrets.BLUESKY_BOT_USERNAME }}
           BLUESKY_BOT_PASSWORD: ${{ secrets.BLUESKY_BOT_PASSWORD }}
+          NODE_OPTIONS: "--dns-result-order=ipv4first" # <-- THE FIX
         run:
           node bot.js
