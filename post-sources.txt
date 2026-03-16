@@ -806,4 +806,9 @@
 "We'd like to know a little bit about you for our files.",
 "And here's to you, Mrs. Robinson.",
 "What's that you say, Mrs. Robinson?",
-"Where i'm from it's purple when it snows."
+"Where I'm from it's purple when it snows.",
+"The America I love still exists at the front desks of our public libraries.",
+"I'm a born librarian with a sex drive.",
+"Teachers are to inspire; librarians are to fulfill.",
+"Like soul-enhanced search engines.",
+"There are official searchers, inquisitors."
